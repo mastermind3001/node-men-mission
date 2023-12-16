@@ -4,3 +4,7 @@
 # npx sequelize-cli db:migrate
 # npx sequelize-cli seed:generate --name demo-user
 # npx sequelize-cli db:seed:all
+# instruct
+# npm i
+# install npx please
+# npm run start
