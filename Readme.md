@@ -1,6 +1,4 @@
 # instruct
-<code>
-npm i
+<code>npm i
 install npx please
-npm run start  
-</code>
+npm run start</code>
