@@ -1,10 +1,4 @@
-const db = require('../database/db.config');
-
-const {randomBytes} = require('crypto');
-const {where} = require("sequelize");
-const e = require("express");
-
-const User = db.users;
+const User = require('../models/users.model');
 
 async function updateUser(req, res) {
 
@@ -36,7 +30,7 @@ async function updateUser(req, res) {
 }
 
 async function findUser(userId) {
-  return await User().findOne({where: {id: userId}});
+  return await User.findOne({where: {id: userId}});
 }
 
 

@@ -18,9 +18,8 @@ const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-const db = require('./database/db.config');
+const db = require('./models/index');
 
-// migra
 db.sequelize.sync();
 
 
