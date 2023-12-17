@@ -1,5 +1,31 @@
 const cluster = require('cluster');
 const os = require('os');
+const sequelize = require("./sequelize");
+const port = 4000;
+
+const app = require('../src/app/app');
+
+async function assertDatabaseConnectionOk() {
+  console.log(`Checking database connection...`);
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection OK!');
+  } catch (error) {
+    console.log('Unable to connect to the database:');
+    console.log(error.message);
+    process.exit(1);
+  }
+}
+
+async function init() {
+  await assertDatabaseConnectionOk();
+
+  console.log(`Starting Sequelize + Express example on port ${port}...`);
+
+  app.listen(port, () => {
+    console.log(`Listening on ${port}`);
+  });
+}
 
 // check if the process is the master process
 if (cluster.isMaster) {
@@ -11,31 +37,8 @@ if (cluster.isMaster) {
   }
 
 } else {
-  const controller = require('./controller/user-controller');
-  const express = require('express');
-  const app = express();
-  const bodyParser = require('body-parser');
-  app.use(bodyParser.json());
+  const sequelize = require('./sequelize');
 
-  const db = require('./models');
-
-  db.sequelize.sync();
-
-  app.post('/balance/change', (req, res) => {
-
-    console.log("enter");
-    if (!req.body.amount || !req.body.userId) {
-      return res.status(400).send({
-        message: 'field missed'
-      });
-    }
-
-    controller.updateUser(req, res).then(res => console.log(res)).catch(e => console.log(e.message));
-  });
-
-
-  const port = 4000;
-  app.listen(port, () => {
-    console.log(`Listening on ${port}`);
-  });
+  sequelize.sync();
+  init();
 }
